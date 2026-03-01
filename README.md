@@ -1,25 +1,25 @@
-# Polonya Oturum Kartı Form Doldurma Aracı
+# Poland Residence Permit Form Filler
 
-Polonya geçici oturum izni (Karta Pobytu) başvuru formunu otomatik dolduran web uygulaması. Türkçe belgeleri (nüfus cüzdanı, pasaport vb.) yapay zeka ile okuyup Lehçe forma çevirir.
+A web application that automatically fills the Polish temporary residence permit (Karta Pobytu) application form. It reads Turkish documents (ID cards, passports, etc.) using AI and translates them into the Polish form.
 
-## Özellikler
+## Features
 
-- **AI Belge Okuma** — Türkçe belgeleri yükle, Claude AI otomatik olarak form alanlarını çıkarsın
-- **TR → PL Çeviri** — Medeni hal, cinsiyet, ülke gibi alanları Lehçeye çevirir
-- **PDF Doldurma** — 131 alanı piksel hassasiyetiyle orijinal PDF üzerine yazar
-- **Canlı Önizleme** — Doldururken PDF önizlemesini anlık görüntüle
-- **Eksik Alan Tespiti** — Belgede bulunamayan alanları listeler
+- **AI Document Parsing** — Upload Turkish documents, Claude AI extracts form fields automatically
+- **TR → PL Translation** — Translates marital status, gender, country names and more into Polish
+- **PDF Filling** — Writes 131 fields onto the original PDF with pixel-level precision
+- **Live Preview** — See the filled PDF update in real time as you type
+- **Missing Field Detection** — Lists fields that couldn't be found in the uploaded document
 
-## Teknolojiler
+## Tech Stack
 
-| Katman | Teknoloji |
-|--------|-----------|
+| Layer | Technology |
+|-------|------------|
 | Backend | Flask, Python 3.10+ |
 | Frontend | React 18, Vite, Tailwind CSS |
 | AI | Claude API (Anthropic), LlamaParse |
 | PDF | ReportLab, pypdf, pdf.js |
 
-## Kurulum
+## Setup
 
 ### 1. Backend
 
@@ -36,22 +36,22 @@ npm install
 npm run build
 ```
 
-### 3. API Anahtarları
+### 3. API Keys
 
 ```bash
 cp form_toolkit/.env.example form_toolkit/.env
 ```
 
-`.env` dosyasına kendi anahtarlarını ekle:
+Add your keys to the `.env` file:
 
 ```
 ANTHROPIC_API_KEY=sk-ant-...
 LLAMAPARSE_API_KEY=llx-...
 ```
 
-## Kullanım
+## Usage
 
-### Web Arayüzü
+### Web UI
 
 ```bash
 cd form_toolkit
@@ -59,56 +59,56 @@ python app.py
 # → http://localhost:5000
 ```
 
-Tarayıcıda aç, belge yükle veya alanları elle doldur, PDF indir.
+Open in browser, upload a document or fill fields manually, then download the PDF.
 
-### Komut Satırı
+### CLI
 
 ```bash
 cd form_toolkit
 
-# Örnek veri dosyası oluştur
+# Generate a sample data file
 python fill_form.py --ornek
 
-# Formu doldur
-python fill_form.py veriler.json doldurulmus.pdf
+# Fill the form
+python fill_form.py data.json output.pdf
 ```
 
-## Proje Yapısı
+## Project Structure
 
 ```
 form_toolkit/
-├── app.py                  # Flask uygulama
-├── config.py               # Yapılandırma
-├── api/routes.py           # API endpoint'leri
+├── app.py                  # Flask application
+├── config.py               # Configuration
+├── api/routes.py           # API endpoints
 ├── core/
-│   ├── ai_extractor.py     # Claude AI entegrasyonu
-│   ├── doc_parser.py       # LlamaParse belge okuma
-│   ├── pdf_engine.py       # ReportLab PDF yazma
-│   ├── field_matcher.py    # Alan eşleştirme
-│   └── validator.py        # Veri doğrulama
-├── fill_form.py            # CLI form doldurma
+│   ├── ai_extractor.py     # Claude AI integration
+│   ├── doc_parser.py       # LlamaParse document reader
+│   ├── pdf_engine.py       # ReportLab PDF writer
+│   ├── field_matcher.py    # Field matching logic
+│   └── validator.py        # Data validation
+├── fill_form.py            # CLI form filler
 ├── assets/
-│   ├── form_field_map_v3.json  # 131 alan koordinat haritası
-│   └── wniosek-...pdf          # Orijinal boş form
+│   ├── form_field_map_v3.json  # 131-field coordinate map
+│   └── wniosek-...pdf          # Original blank form
 └── frontend/
     ├── src/
-    │   ├── form_app.jsx    # Ana form bileşeni
-    │   ├── PdfPreview.jsx  # PDF önizleme
-    │   └── DocImport.jsx   # Belge yükleme
+    │   ├── form_app.jsx    # Main form component
+    │   ├── PdfPreview.jsx  # PDF preview
+    │   └── DocImport.jsx   # Document upload
     └── package.json
 ```
 
-## API Endpoint'leri
+## API Endpoints
 
-| Yol | Metod | Açıklama |
-|-----|-------|----------|
-| `/api/fields` | GET | Form alan listesi |
-| `/api/sample` | GET | Örnek doldurulmuş veri |
-| `/api/generate-pdf` | POST | PDF oluştur ve indir |
-| `/api/import-doc` | POST | Belge yükle, AI ile alanları çıkar |
-| `/api/template-pdf` | GET | Boş form PDF |
-| `/api/field-map` | GET | Alan koordinat haritası |
+| Path | Method | Description |
+|------|--------|-------------|
+| `/api/fields` | GET | List form fields |
+| `/api/sample` | GET | Sample filled data |
+| `/api/generate-pdf` | POST | Generate and download filled PDF |
+| `/api/import-doc` | POST | Upload document, extract fields with AI |
+| `/api/template-pdf` | GET | Blank form PDF |
+| `/api/field-map` | GET | Field coordinate map |
 
-## Lisans
+## License
 
 MIT
