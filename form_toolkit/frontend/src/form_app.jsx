@@ -3,6 +3,54 @@ import PdfPreview from "./PdfPreview.jsx";
 import DocImport from "./DocImport.jsx";
 import { generatePdf } from "./api.js";
 
+/* ─────────────────── TR → PL ÇEVİRİ ─────────────────── */
+const TR_PL_MONTHS = {
+  "OCAK": "STYCZEŃ", "SUBAT": "LUTY", "ŞUBAT": "LUTY", "MART": "MARZEC",
+  "NISAN": "KWIECIEŃ", "NİSAN": "KWIECIEŃ", "MAYIS": "MAJ",
+  "HAZIRAN": "CZERWIEC", "HAZİRAN": "CZERWIEC", "TEMMUZ": "LIPIEC",
+  "AGUSTOS": "SIERPIEŃ", "AĞUSTOS": "SIERPIEŃ", "EYLUL": "WRZESIEŃ",
+  "EYLÜL": "WRZESIEŃ", "EKIM": "PAŹDZIERNIK", "KASIM": "LISTOPAD",
+  "ARALIK": "GRUDZIEŃ",
+};
+const TR_PL_COUNTRIES = {
+  "TURKIYE": "TURCJA", "TÜRKİYE": "TURCJA", "TURCJA": "TURCJA",
+  "ALMANYA": "NIEMCY", "FRANSA": "FRANCJA", "INGILTERE": "WIELKA BRYTANIA",
+  "İNGİLTERE": "WIELKA BRYTANIA", "ITALYA": "WŁOCHY", "İTALYA": "WŁOCHY",
+  "ISPANYA": "HISZPANIA", "İSPANYA": "HISZPANIA", "HOLLANDA": "HOLANDIA",
+  "BELCIKA": "BELGIA", "BELÇİKA": "BELGIA", "AVUSTURYA": "AUSTRIA",
+  "ISVICRE": "SZWAJCARIA", "İSVİÇRE": "SZWAJCARIA", "YUNANISTAN": "GRECJA",
+  "BULGARISTAN": "BUŁGARIA", "ROMANYA": "RUMUNIA", "UKRAYNA": "UKRAINA",
+  "RUSYA": "ROSJA", "IRAN": "IRAN", "İRAN": "IRAN", "IRAK": "IRAK",
+  "SURIYE": "SYRIA", "SURİYE": "SYRIA", "MISIR": "EGIPT",
+  "ABD": "USA", "AMERIKA": "USA", "KANADA": "KANADA",
+  "CIN": "CHINY", "ÇİN": "CHINY", "JAPONYA": "JAPONIA",
+  "PAKISTAN": "PAKISTAN", "PAKİSTAN": "PAKISTAN",
+  "BANGLADES": "BANGLADESZ", "BANGLADEŞ": "BANGLADESZ",
+  "HINDISTAN": "INDIE", "HİNDİSTAN": "INDIE",
+  "GURCISTAN": "GRUZJA", "GÜRCÜSTAN": "GRUZJA",
+  "AZERBAYCAN": "AZERBEJDŻAN", "OZBEKISTAN": "UZBEKISTAN",
+  "ÖZBEKİSTAN": "UZBEKISTAN", "TURKMENISTAN": "TURKMENISTAN",
+  "TÜRKMENİSTAN": "TURKMENISTAN", "KAZAKISTAN": "KAZACHSTAN",
+  "KIRGIZISTAN": "KIRGISTAN", "TACIKISTAN": "TADŻYKISTAN",
+  "TAYİKİSTAN": "TADŻYKISTAN", "NEPAL": "NEPAL", "SRI LANKA": "SRI LANKA",
+  "POLONYA": "POLSKA", "POLSKA": "POLSKA",
+};
+
+/** Metin içindeki Türkçe ay ve ülke adlarını Lehçeye çevirir */
+function translateToPolish(text) {
+  if (!text) return text;
+  let result = text;
+  // Ay adları
+  for (const [tr, pl] of Object.entries(TR_PL_MONTHS)) {
+    result = result.replace(new RegExp(`\\b${tr}\\b`, "gi"), pl);
+  }
+  // Ülke adları
+  for (const [tr, pl] of Object.entries(TR_PL_COUNTRIES)) {
+    result = result.replace(new RegExp(`\\b${tr}\\b`, "gi"), pl);
+  }
+  return result;
+}
+
 /* ─────────────────── ALAN TANIMLARı ─────────────────── */
 const TABS = [
   { id: "personal", label: "Kişisel Bilgiler", pages: "S.1-2" },
@@ -527,6 +575,7 @@ export default function FormApp() {
                             <input type="text" placeholder="2024/01-2024/06"
                               value={data[`p3a_r${i+1}_period`] || ""}
                               onChange={e => handleChange(`p3a_r${i+1}_period`, e.target.value.toUpperCase())}
+                              onBlur={e => handleChange(`p3a_r${i+1}_period`, translateToPolish(e.target.value.toUpperCase()))}
                               className="w-full px-1.5 py-0.5 text-[11px] font-mono bg-transparent
                                          outline-none focus:bg-white/[0.06] rounded transition-colors
                                          placeholder:text-zinc-700 text-zinc-50 text-sm py-1" />
@@ -535,6 +584,7 @@ export default function FormApp() {
                             <input type="text" placeholder="WIZA / ZEZWOLENIE"
                               value={data[`p3a_r${i+1}_basis`] || ""}
                               onChange={e => handleChange(`p3a_r${i+1}_basis`, e.target.value.toUpperCase())}
+                              onBlur={e => handleChange(`p3a_r${i+1}_basis`, translateToPolish(e.target.value.toUpperCase()))}
                               className="w-full px-1.5 py-0.5 text-[11px] font-mono bg-transparent
                                          outline-none focus:bg-white/[0.06] rounded transition-colors
                                          placeholder:text-zinc-700 text-zinc-50 text-sm py-1" />
@@ -558,17 +608,19 @@ export default function FormApp() {
                       {Array.from({ length: PREV_STAY_OUT_ROWS }, (_, i) => (
                         <tr key={i} className="border-b border-white/[0.06] hover:bg-white/[0.03]">
                           <td className="px-0 py-0">
-                            <input type="text" placeholder="2024/01-2024/06"
+                            <input type="text" placeholder="PAŹDZIERNIK 2024 – LUTY 2025"
                               value={data[`p5b_r${i+1}_period`] || ""}
                               onChange={e => handleChange(`p5b_r${i+1}_period`, e.target.value.toUpperCase())}
+                              onBlur={e => handleChange(`p5b_r${i+1}_period`, translateToPolish(e.target.value.toUpperCase()))}
                               className="w-full px-1.5 py-0.5 text-[11px] font-mono bg-transparent
                                          outline-none focus:bg-white/[0.06] rounded transition-colors
                                          placeholder:text-zinc-700 text-zinc-50 text-sm py-1" />
                           </td>
                           <td className="px-0 py-0">
-                            <input type="text" placeholder="TURKEY / GERMANY"
+                            <input type="text" placeholder="TURCJA / NIEMCY"
                               value={data[`p5b_r${i+1}_basis`] || ""}
                               onChange={e => handleChange(`p5b_r${i+1}_basis`, e.target.value.toUpperCase())}
+                              onBlur={e => handleChange(`p5b_r${i+1}_basis`, translateToPolish(e.target.value.toUpperCase()))}
                               className="w-full px-1.5 py-0.5 text-[11px] font-mono bg-transparent
                                          outline-none focus:bg-white/[0.06] rounded transition-colors
                                          placeholder:text-zinc-700 text-zinc-50 text-sm py-1" />

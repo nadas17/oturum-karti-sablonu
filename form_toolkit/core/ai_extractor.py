@@ -58,7 +58,8 @@ Source documents may be in Turkish. ALL extracted values must be written in POLI
 Key translations you MUST apply:
 - Sex: ERKEK/BAY → M, KADIN/BAYAN → K
 - Marital status: BEKAR → KAWALER (male) / PANNA (female), EVLİ → ŻONATY (male) / ZAMĘŻNA (female), BOŞANMIŞ → ROZWIEDZIONY (male) / ROZWIEDZIONA (female), DUL → WDOWIEC (male) / WDOWA (female)
-- Country names: TÜRKİYE → TURCJA, ALMANYA → NIEMCY, FRANSA → FRANCJA, İNGİLTERE → WIELKA BRYTANIA, İTALYA → WŁOCHY, İSPANYA → HISZPANIA, HOLLANDA → HOLANDIA, BELÇİKA → BELGIA, AVUSTURYA → AUSTRIA, İSVİÇRE → SZWAJCARIA, YUNANISTAN → GRECJA, BULGARISTAN → BUŁGARIA, ROMANYA → RUMUNIA, UKRAYNA → UKRAINA, RUSYA → ROSJA, İRAN → IRAN, IRAK → IRAK, SURİYE → SYRIA, MISIR → EGIPT, ABD/AMERİKA → USA, KANADA → KANADA, ÇİN → CHINY, JAPONYA → JAPONIA, GÜNEY KORE → KOREA POŁUDNIOWA, HİNDİSTAN → INDIE, BREZİLYA → BRAZYLIA, ARJANTİN → ARGENTYNA, POLONYA → POLSKA
+- Country names: TÜRKİYE → TURCJA, ALMANYA → NIEMCY, FRANSA → FRANCJA, İNGİLTERE → WIELKA BRYTANIA, İTALYA → WŁOCHY, İSPANYA → HISZPANIA, HOLLANDA → HOLANDIA, BELÇİKA → BELGIA, AVUSTURYA → AUSTRIA, İSVİÇRE → SZWAJCARIA, YUNANISTAN → GRECJA, BULGARISTAN → BUŁGARIA, ROMANYA → RUMUNIA, UKRAYNA → UKRAINA, RUSYA → ROSJA, İRAN → IRAN, IRAK → IRAK, SURİYE → SYRIA, MISIR → EGIPT, ABD/AMERİKA → USA, KANADA → KANADA, ÇİN → CHINY, JAPONYA → JAPONIA, GÜNEY KORE → KOREA POŁUDNIOWA, HİNDİSTAN → INDIE, PAKİSTAN → PAKISTAN, BANGLADEŞ → BANGLADESZ, AFGANISTAN → AFGANISTAN, NEPAL → NEPAL, SRİ LANKA → SRI LANKA, GÜRCÜSTAN → GRUZJA, AZERBAYCAN → AZERBEJDŻAN, ÖZBEKİSTAN → UZBEKISTAN, TÜRKMENİSTAN → TURKMENISTAN, KAZAKISTAN → KAZACHSTAN, KIRGIZISTAN → KIRGISTAN, TAYİKİSTAN → TADŻYKISTAN, BREZİLYA → BRAZYLIA, ARJANTİN → ARGENTYNA, POLONYA → POLSKA
+- Month names (Turkish → Polish): OCAK → STYCZEŃ, ŞUBAT → LUTY, MART → MARZEC, NİSAN → KWIECIEŃ, MAYIS → MAJ, HAZİRAN → CZERWIEC, TEMMUZ → LIPIEC, AĞUSTOS → SIERPIEŃ, EYLÜL → WRZESIEŃ, EKİM → PAŹDZIERNIK, KASIM → LISTOPAD, ARALIK → GRUDZIEŃ
 - Citizenship/nationality: TÜRK → TURECKIE (neuter) / TURECKA (female) / TURECKI (male)
 - Kinship: EŞ → MAŁŻONEK (male) / MAŁŻONKA (female), OĞUL → SYN, KIZ → CÓRKA, ANNE → MATKA, BABA → OJCIEC
 - Education: İLKOKUL → PODSTAWOWE, ORTAOKUL → GIMNAZJALNE, LİSE → ŚREDNIE, ÜNİVERSİTE → WYŻSZE
@@ -101,6 +102,7 @@ The following JSON array describes all form fields you need to fill:
    - period format: "YYYY/MM-YYYY/MM"
 
 9. **Previous stays abroad (section 5b):** Use `p5b_r{{j}}_period` and `p5b_r{{j}}_basis` where j=1-4.
+   - IMPORTANT: Translate month names and country names to Polish. Example: "EKIM 2024 – ŞUBAT 2025" → "PAŹDZIERNIK 2024 – LUTY 2025", "TURCJA" not "TÜRKİYE".
 
 10. **Only include fields where you found a matching value in the document.** Do not guess or fabricate values. If a field has no corresponding data in the document, omit it from the output.
 
