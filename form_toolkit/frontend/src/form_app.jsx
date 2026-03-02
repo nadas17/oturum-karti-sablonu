@@ -134,6 +134,9 @@ const LEGAL_SECTION_1 = [
   { id: "p5_basis_4", label: "Diğer belge (inny dokument)" },
 ];
 
+const FINANCE_ROWS = 4;
+const INSURANCE_ROWS = 4;
+
 const LEGAL_SECTION_2 = [
   { id: "p5_conviction_checkbox", label: "Mahkûmiyet var — Evet (skazanie)" },
   { id: "p6_checkbox_1",          label: "VIII — Hayır, mahkûmiyet yok (nie)" },
@@ -363,6 +366,7 @@ export default function FormApp() {
   }, []);
 
   const handleDocImport = useCallback((importedData, missing) => {
+    console.log("[FormApp] handleDocImport called, keys:", Object.keys(importedData).length, "missing:", missing?.length);
     const newData = {};
     const newFamily = Array.from({ length: 6 }, () => ({}));
     // Mevcut veriyi koru, üzerine yaz
@@ -682,6 +686,42 @@ export default function FormApp() {
                     {LEGAL_SECTION_1.map(opt =>
                       <CheckboxInput key={opt.id} {...opt} checked={data[opt.id]} onChange={handleChange} />
                     )}
+                  </div>
+                </div>
+
+                <div className="glass rounded-xl p-4 mb-3">
+                  <SectionHeading title="V. Mali Kaynaklar (Środki finansowe)" subtitle="Sayfa 5 — Geçim masraflarını karşılama bilgisi" />
+                  <div className="space-y-1">
+                    {Array.from({ length: FINANCE_ROWS }, (_, i) => (
+                      <input key={i} type="text"
+                        id={`p5_finance_r${i+1}`}
+                        placeholder={i === 0 ? "Ör: UMOWA O PRACĘ, WYNAGRODZENIE 5000 PLN MIESIĘCZNIE" : ""}
+                        value={data[`p5_finance_r${i+1}`] || ""}
+                        onChange={e => handleChange(`p5_finance_r${i+1}`, e.target.value.toUpperCase())}
+                        onBlur={e => handleChange(`p5_finance_r${i+1}`, translateToPolish(e.target.value.toUpperCase()))}
+                        className="w-full px-2 py-1 text-xs font-mono bg-transparent
+                                   outline-none focus:bg-white/[0.06] rounded transition-colors
+                                   border border-white/[0.06] focus:border-white/15
+                                   placeholder:text-zinc-700 text-zinc-50" />
+                    ))}
+                  </div>
+                </div>
+
+                <div className="glass rounded-xl p-4 mb-3">
+                  <SectionHeading title="VI. Sağlık Sigortası (Ubezpieczenie zdrowotne)" subtitle="Sayfa 5 — Sağlık sigortası bilgisi" />
+                  <div className="space-y-1">
+                    {Array.from({ length: INSURANCE_ROWS }, (_, i) => (
+                      <input key={i} type="text"
+                        id={`p5_insurance_r${i+1}`}
+                        placeholder={i === 0 ? "Ör: ZUS / NFZ, NR POLISY: 123456789" : ""}
+                        value={data[`p5_insurance_r${i+1}`] || ""}
+                        onChange={e => handleChange(`p5_insurance_r${i+1}`, e.target.value.toUpperCase())}
+                        onBlur={e => handleChange(`p5_insurance_r${i+1}`, translateToPolish(e.target.value.toUpperCase()))}
+                        className="w-full px-2 py-1 text-xs font-mono bg-transparent
+                                   outline-none focus:bg-white/[0.06] rounded transition-colors
+                                   border border-white/[0.06] focus:border-white/15
+                                   placeholder:text-zinc-700 text-zinc-50" />
+                    ))}
                   </div>
                 </div>
 

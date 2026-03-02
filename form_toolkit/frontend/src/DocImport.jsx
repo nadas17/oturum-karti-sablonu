@@ -27,6 +27,8 @@ export default function DocImport({ fieldList, onImport, showToast, onNavigateTo
     setPhase("loading");
     try {
       const data = await parseDocument(file);
+      console.log("[DocImport] parse response:", JSON.stringify(data).slice(0, 500));
+      console.log("[DocImport] mappings count:", data.mappings?.length, "missing:", data.missing_fields?.length);
       setResult(data);
       // API'den gelen mappings'i düzenlenebilir hale getir
       setMappings(
@@ -74,6 +76,7 @@ export default function DocImport({ fieldList, onImport, showToast, onNavigateTo
   }, []);
 
   const handleImport = useCallback(() => {
+    console.log("[DocImport] handleImport called, mappings:", mappings.length);
     const importData = {};
     let count = 0;
     for (const m of mappings) {

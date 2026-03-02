@@ -5048,6 +5048,86 @@
       "font_size": 7
     },
     {
+      "field_id": "p5_finance_r1",
+      "label": "V. Mali kaynaklar — satır 1",
+      "description": "Informacja o środkach finansowych — satır 1",
+      "page": 5,
+      "field_type": "table_cell",
+      "bbox": [69.5, 355.9, 545.5, 363.6],
+      "num_cells": 0,
+      "font_size": 7
+    },
+    {
+      "field_id": "p5_finance_r2",
+      "label": "V. Mali kaynaklar — satır 2",
+      "description": "Informacja o środkach finansowych — satır 2",
+      "page": 5,
+      "field_type": "table_cell",
+      "bbox": [69.5, 369.1, 545.6, 376.8],
+      "num_cells": 0,
+      "font_size": 7
+    },
+    {
+      "field_id": "p5_finance_r3",
+      "label": "V. Mali kaynaklar — satır 3",
+      "description": "Informacja o środkach finansowych — satır 3",
+      "page": 5,
+      "field_type": "table_cell",
+      "bbox": [69.5, 382.4, 545.4, 390.1],
+      "num_cells": 0,
+      "font_size": 7
+    },
+    {
+      "field_id": "p5_finance_r4",
+      "label": "V. Mali kaynaklar — satır 4",
+      "description": "Informacja o środkach finansowych — satır 4",
+      "page": 5,
+      "field_type": "table_cell",
+      "bbox": [69.5, 395.6, 545.6, 403.3],
+      "num_cells": 0,
+      "font_size": 7
+    },
+    {
+      "field_id": "p5_insurance_r1",
+      "label": "VI. Sağlık sigortası — satır 1",
+      "description": "Informacja o ubezpieczeniu zdrowotnym — satır 1",
+      "page": 5,
+      "field_type": "table_cell",
+      "bbox": [69.5, 452.3, 545.4, 459.9],
+      "num_cells": 0,
+      "font_size": 7
+    },
+    {
+      "field_id": "p5_insurance_r2",
+      "label": "VI. Sağlık sigortası — satır 2",
+      "description": "Informacja o ubezpieczeniu zdrowotnym — satır 2",
+      "page": 5,
+      "field_type": "table_cell",
+      "bbox": [69.5, 465.6, 545.4, 473.3],
+      "num_cells": 0,
+      "font_size": 7
+    },
+    {
+      "field_id": "p5_insurance_r3",
+      "label": "VI. Sağlık sigortası — satır 3",
+      "description": "Informacja o ubezpieczeniu zdrowotnym — satır 3",
+      "page": 5,
+      "field_type": "table_cell",
+      "bbox": [69.5, 478.8, 545.4, 486.5],
+      "num_cells": 0,
+      "font_size": 7
+    },
+    {
+      "field_id": "p5_insurance_r4",
+      "label": "VI. Sağlık sigortası — satır 4",
+      "description": "Informacja o ubezpieczeniu zdrowotnym — satır 4",
+      "page": 5,
+      "field_type": "table_cell",
+      "bbox": [69.5, 492.0, 545.4, 499.7],
+      "num_cells": 0,
+      "font_size": 7
+    },
+    {
       "field_id": "p4_staying_yes",
       "label": "Tak / Yes (Polonya'da bulunuyor)",
       "description": "Şu anda Polonya'da mı kalıyorsunuz? — Evet",

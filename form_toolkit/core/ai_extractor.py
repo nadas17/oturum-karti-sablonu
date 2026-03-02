@@ -68,6 +68,26 @@ Key translations you MUST apply:
 - City names in Poland should remain in Polish (WARSZAWA, KRAKÓW, etc.)
 - Turkish city names should be transliterated: İSTANBUL → STAMBUŁ, ANKARA → ANKARA, İZMİR → IZMIR, etc.
 
+## Voivodeship Inference
+When you find a Polish city in the address, you MUST infer and fill `addr_1_voivodeship` with the correct voivodeship, even if it is not explicitly stated in the document. Use this mapping:
+- WARSZAWA, RADOM, PŁOCK, SIEDLCE, OSTROŁĘKA → MAZOWIECKIE
+- KRAKÓW, TARNÓW, NOWY SĄCZ, OŚWIĘCIM → MAŁOPOLSKIE
+- GDAŃSK, GDYNIA, SOPOT, SŁUPSK, TCZEW → POMORSKIE
+- WROCŁAW, WAŁBRZYCH, LEGNICA, JELENIA GÓRA → DOLNOŚLĄSKIE
+- POZNAŃ, KALISZ, KONIN, PIŁA, LESZNO → WIELKOPOLSKIE
+- ŁÓDŹ, PIOTRKÓW TRYBUNALSKI, SKIERNIEWICE → ŁÓDZKIE
+- KATOWICE, CZĘSTOCHOWA, GLIWICE, ZABRZE, BIELSKO-BIAŁA, SOSNOWIEC, BYTOM, TYCHY, RYBNIK → ŚLĄSKIE
+- LUBLIN, ZAMOŚĆ, CHEŁM, BIAŁA PODLASKA → LUBELSKIE
+- BIAŁYSTOK, ŁOMŻA, SUWAŁKI → PODLASKIE
+- SZCZECIN, KOSZALIN, STARGARD → ZACHODNIOPOMORSKIE
+- RZESZÓW, PRZEMYŚL, KROSNO, STALOWA WOLA → PODKARPACKIE
+- BYDGOSZCZ, TORUŃ, WŁOCŁAWEK, GRUDZIĄDZ, INOWROCŁAW → KUJAWSKO-POMORSKIE
+- KIELCE, RADOM, OSTROWIEC ŚWIĘTOKRZYSKI → ŚWIĘTOKRZYSKIE
+- OLSZTYN, ELBLĄG, EŁK → WARMIŃSKO-MAZURSKIE
+- ZIELONA GÓRA, GORZÓW WIELKOPOLSKI → LUBUSKIE
+- OPOLE, NYSA, KĘDZIERZYN-KOŹLE → OPOLSKIE
+If the city is not listed above, use your knowledge of Polish geography to determine the correct voivodeship.
+
 For any Turkish word not listed above, translate it to Polish using your knowledge.
 
 ## Form Fields Schema
@@ -104,11 +124,15 @@ The following JSON array describes all form fields you need to fill:
 9. **Previous stays abroad (section 5b):** Use `p5b_r{{j}}_period` and `p5b_r{{j}}_basis` where j=1-4.
    - IMPORTANT: Translate month names and country names to Polish. Example: "EKIM 2024 – ŞUBAT 2025" → "PAŹDZIERNIK 2024 – LUTY 2025", "TURCJA" not "TÜRKİYE".
 
-10. **Only include fields where you found a matching value in the document.** Do not guess or fabricate values. If a field has no corresponding data in the document, omit it from the output.
+10. **Financial means (section V):** Use `p5_finance_r1` to `p5_finance_r4` for information about financial resources (employment, salary, savings, etc.). Write in Polish.
 
-11. **Address fields:** addr_1_voivodeship, addr_2_city, addr_3_street, addr_4_house_no, addr_5_flat_no, addr_6_postal_code.
+11. **Health insurance (section VI):** Use `p5_insurance_r1` to `p5_insurance_r4` for health insurance information (ZUS/NFZ, policy number, etc.). Write in Polish.
 
-12. **Application metadata:** do_authority (voivodeship), date_year, date_month, date_day.
+12. **Only include fields where you found a matching value in the document.** Do not guess or fabricate values. If a field has no corresponding data in the document, omit it from the output.
+
+13. **Address fields:** addr_1_voivodeship, addr_2_city, addr_3_street, addr_4_house_no, addr_5_flat_no, addr_6_postal_code.
+
+14. **Application metadata:** do_authority (voivodeship — infer from address city, same as addr_1_voivodeship), date_year, date_month, date_day.
 
 ## Missing Fields Detection
 After extraction, identify CRITICAL fields that could not be found in the document. Only report truly important missing fields from these categories:
