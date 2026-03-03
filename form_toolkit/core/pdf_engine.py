@@ -201,9 +201,148 @@ def _create_overlay_pdf(ops: list, total_pages: int, pdf_w: float, pdf_h: float)
     return buf
 
 
+def _get_flat_template(input_pdf_path: str) -> str:
+    """
+    Form şablonunu bir kez düzleştir (annotation appearance'larını sayfa
+    content stream'ine göm, sonra annotation ve AcroForm'u kaldır).
+    Düzleştirilmiş dosyayı önbelleğe al.
+    Annotation yoksa orijinal dosyayı olduğu gibi döndürür.
+    """
+    reader = PdfReader(input_pdf_path)
+
+    # Annotation var mı kontrol et — yoksa düzleştirmeye gerek yok
+    has_annots = any(page.get("/Annots") for page in reader.pages)
+    if not has_annots:
+        return input_pdf_path
+
+    flat_path = input_pdf_path.replace(".pdf", "_flat.pdf")
+    if os.path.isfile(flat_path):
+        return flat_path
+
+    writer = PdfWriter()
+    writer.append_pages_from_reader(reader)
+
+    from pypdf.generic import (
+        NameObject, ArrayObject, DictionaryObject,
+        StreamObject, NumberObject,
+    )
+
+    for page_idx, page in enumerate(writer.pages):
+        annots_ref = page.get("/Annots")
+        if not annots_ref:
+            continue
+        annots = annots_ref.get_object() if hasattr(annots_ref, "get_object") else annots_ref
+        if not annots:
+            continue
+
+        extra_ops = []
+        for idx, annot_ref in enumerate(annots):
+            try:
+                annot = annot_ref.get_object() if hasattr(annot_ref, "get_object") else annot_ref
+                ap = annot.get("/AP")
+                if not ap:
+                    continue
+                ap_obj = ap.get_object() if hasattr(ap, "get_object") else ap
+                normal_ref = ap_obj.get("/N")
+                if not normal_ref:
+                    continue
+                normal = normal_ref.get_object() if hasattr(normal_ref, "get_object") else normal_ref
+                rect = annot.get("/Rect")
+                if not rect:
+                    continue
+                rect_vals = [float(v) for v in (rect.get_object() if hasattr(rect, "get_object") else rect)]
+                x0, y0, x1, y1 = rect_vals
+                w, h = x1 - x0, y1 - y0
+                if w <= 0 or h <= 0:
+                    continue
+
+                # Checkbox widget: /AP/N bir dict (/Off, /Tak vs.)
+                # Boş kutu görünümü için /Off stream'ini kullan
+                if isinstance(normal, dict) and not hasattr(normal, "get_data"):
+                    off_ref = normal.get("/Off")
+                    if not off_ref:
+                        continue
+                    off_stream = off_ref.get_object() if hasattr(off_ref, "get_object") else off_ref
+                    if not hasattr(off_stream, "get_data"):
+                        continue
+                    appearance_ref = off_ref
+                    appearance_obj = off_stream
+                elif hasattr(normal, "get_data"):
+                    appearance_ref = normal_ref
+                    appearance_obj = normal
+                else:
+                    continue
+
+                xobj_name = f"/FA{page_idx}_{idx}"
+
+                # XObject'i sayfanın Resources'ına ekle
+                resources = page.get("/Resources")
+                if resources and hasattr(resources, "get_object"):
+                    resources = resources.get_object()
+                if not resources:
+                    resources = DictionaryObject()
+                    page[NameObject("/Resources")] = resources
+
+                xobjects = resources.get("/XObject")
+                if xobjects and hasattr(xobjects, "get_object"):
+                    xobjects = xobjects.get_object()
+                if not xobjects:
+                    xobjects = DictionaryObject()
+                    resources[NameObject("/XObject")] = xobjects
+
+                xobjects[NameObject(xobj_name)] = appearance_ref
+
+                # BBox'a göre ölçekle
+                bbox = appearance_obj.get("/BBox", [0, 0, w, h])
+                if hasattr(bbox, "get_object"):
+                    bbox = bbox.get_object()
+                bw = float(bbox[2]) - float(bbox[0])
+                bh = float(bbox[3]) - float(bbox[1])
+                sx = w / bw if bw > 0 else 1
+                sy = h / bh if bh > 0 else 1
+
+                extra_ops.append(f"q {sx:.6f} 0 0 {sy:.6f} {x0:.2f} {y0:.2f} cm {xobj_name} Do Q\n")
+            except Exception:
+                continue
+
+        if extra_ops:
+            stream_content = "".join(extra_ops).encode("latin-1")
+            new_stream = StreamObject()
+            new_stream[NameObject("/Length")] = NumberObject(len(stream_content))
+            new_stream._data = stream_content
+            stream_ref = writer._add_object(new_stream)
+
+            existing = page.get("/Contents")
+            if existing:
+                obj = existing.get_object() if hasattr(existing, "get_object") else existing
+                if isinstance(obj, ArrayObject):
+                    contents = ArrayObject(list(obj) + [stream_ref])
+                elif isinstance(obj, list):
+                    contents = ArrayObject(list(obj) + [stream_ref])
+                else:
+                    contents = ArrayObject([existing, stream_ref])
+                page[NameObject("/Contents")] = contents
+            else:
+                page[NameObject("/Contents")] = stream_ref
+
+        # Annotation'ları kaldır
+        if "/Annots" in page:
+            del page["/Annots"]
+
+    # AcroForm'u kaldır
+    if "/AcroForm" in writer._root_object:
+        del writer._root_object["/AcroForm"]
+
+    with open(flat_path, "wb") as f:
+        writer.write(f)
+
+    return flat_path
+
+
 def _merge_to_bytes(input_pdf_path: str, overlay_buf: BytesIO) -> bytes:
     """Orijinal PDF + overlay → bytes."""
-    base = PdfReader(input_pdf_path)
+    flat_path = _get_flat_template(input_pdf_path)
+    base = PdfReader(flat_path)
     overlay = PdfReader(overlay_buf)
     writer = PdfWriter()
 
