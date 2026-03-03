@@ -10,7 +10,7 @@ import { parseDocument } from "./api.js";
  *   onImport: (data) => void — eşleştirilen verileri forma aktarır
  *   showToast: (msg, type) => void
  */
-export default function DocImport({ fieldList, onImport, showToast, onNavigateToField, formType }) {
+export default function DocImport({ fieldList, onImport, showToast, onNavigateToField }) {
   const [phase, setPhase] = useState("upload"); // "upload" | "loading" | "mapping"
   const [dragOver, setDragOver] = useState(false);
   const [result, setResult] = useState(null);    // API yanıtı
@@ -26,7 +26,7 @@ export default function DocImport({ fieldList, onImport, showToast, onNavigateTo
 
     setPhase("loading");
     try {
-      const data = await parseDocument(file, formType);
+      const data = await parseDocument(file);
       console.log("[DocImport] parse response:", JSON.stringify(data).slice(0, 500));
       console.log("[DocImport] mappings count:", data.mappings?.length, "missing:", data.missing_fields?.length);
       setResult(data);
@@ -44,7 +44,7 @@ export default function DocImport({ fieldList, onImport, showToast, onNavigateTo
       showToast(err.message || "Belge ayrıştırılamadı", "error");
       setPhase("upload");
     }
-  }, [showToast, formType]);
+  }, [showToast]);
 
   const handleDrop = useCallback((e) => {
     e.preventDefault();

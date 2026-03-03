@@ -3,12 +3,12 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import ErrorBoundary from "./ErrorBoundary.jsx";
-import App from "./App.jsx";
+import FormApp from "./form_app.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <ErrorBoundary>
-      <App />
+      <FormApp />
     </ErrorBoundary>
   </StrictMode>
 );

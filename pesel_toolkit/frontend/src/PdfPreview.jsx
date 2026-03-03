@@ -141,11 +141,11 @@ function buildOverlayItems(fieldMap, data, familyData, scale) {
 
 /* ─── Ana bileşen ─── */
 
-export default function PdfPreview({ data, familyData, formType }) {
+export default function PdfPreview({ data, familyData }) {
   const [pdfDoc, setPdfDoc]       = useState(null);
   const [fieldMap, setFieldMap]   = useState(null);
   const [currentPage, setPage]    = useState(1);
-  const [totalPages, setTotal]    = useState(formType === "pesel" ? 4 : 8);
+  const [totalPages, setTotal]    = useState(4);
   const [scale, setScale]         = useState(1);
   const [overlayItems, setOverlay] = useState([]);
   const [loading, setLoading]     = useState(true);
@@ -163,7 +163,7 @@ export default function PdfPreview({ data, familyData, formType }) {
     setLoading(true);
     setError(null);
 
-    Promise.all([getTemplatePdf(formType), getFieldMap(formType)])
+    Promise.all([getTemplatePdf(), getFieldMap()])
       .then(([arrayBuffer, fm]) => {
         if (cancelled) return;
         setFieldMap(fm);
@@ -186,7 +186,7 @@ export default function PdfPreview({ data, familyData, formType }) {
       cancelled = true;
       if (loadingTask) loadingTask.destroy();
     };
-  }, [formType]);
+  }, []);
 
   /* ── Sayfa render ── */
   useEffect(() => {

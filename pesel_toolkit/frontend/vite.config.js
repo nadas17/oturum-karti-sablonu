@@ -14,17 +14,11 @@ export default defineConfig({
     emptyOutDir: true,
   },
   server: {
-    port: 5173,
+    port: 5174,
     proxy: {
-      "/api/oturum": {
-        target: "http://localhost:5000",
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/oturum/, "/api"),
-      },
-      "/api/pesel": {
+      "/api": {
         target: "http://localhost:5001",
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/pesel/, "/api"),
       },
     },
   },

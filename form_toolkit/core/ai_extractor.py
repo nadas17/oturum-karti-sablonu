@@ -68,8 +68,8 @@ Key translations you MUST apply:
 - City names in Poland should remain in Polish (WARSZAWA, KRAKÓW, etc.)
 - Turkish city names should be transliterated: İSTANBUL → STAMBUŁ, ANKARA → ANKARA, İZMİR → IZMIR, etc.
 
-## Voivodeship Inference
-When you find a Polish city in the address, you MUST infer and fill `addr_1_voivodeship` with the correct voivodeship, even if it is not explicitly stated in the document. Use this mapping:
+## Voivodeship Inference (MANDATORY)
+CRITICAL: When you find a Polish city in the address, you MUST ALWAYS infer and fill BOTH `addr_1_voivodeship` AND `do_authority` with the correct voivodeship name. NEVER leave these empty if a Polish city is found in the document. Use this mapping:
 - WARSZAWA, RADOM, PŁOCK, SIEDLCE, OSTROŁĘKA → MAZOWIECKIE
 - KRAKÓW, TARNÓW, NOWY SĄCZ, OŚWIĘCIM → MAŁOPOLSKIE
 - GDAŃSK, GDYNIA, SOPOT, SŁUPSK, TCZEW → POMORSKIE
@@ -131,6 +131,7 @@ The following JSON array describes all form fields you need to fill:
 12. **Only include fields where you found a matching value in the document.** Do not guess or fabricate values. If a field has no corresponding data in the document, omit it from the output.
 
 13. **Address fields:** addr_1_voivodeship, addr_2_city, addr_3_street, addr_4_house_no, addr_5_flat_no, addr_6_postal_code.
+   - CRITICAL: You MUST ALWAYS fill `addr_1_voivodeship` by inferring from `addr_2_city` using the Voivodeship Inference table above. For example, if city is GDAŃSK → voivodeship is POMORSKIE. Never leave voivodeship empty if a city is found.
 
 14. **Application metadata:** do_authority (voivodeship — infer from address city, same as addr_1_voivodeship), date_year, date_month, date_day.
 
